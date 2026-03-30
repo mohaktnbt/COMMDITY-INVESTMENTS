@@ -1,0 +1,30 @@
+{
+  "name": "@commodity-monitor/workers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.ts",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@commodity-monitor/shared": "workspace:*",
+    "@commodity-monitor/data-connectors": "workspace:*",
+    "@questdb/nodejs-client": "^4.0.0",
+    "axios": "^1.7.0",
+    "dotenv": "^16.4.0",
+    "ioredis": "^5.4.0",
+    "node-cron": "^3.0.0",
+    "pg": "^8.13.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/node-cron": "^3.0.0",
+    "@types/pg": "^8.11.0",
+    "@types/ws": "^8.5.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}
