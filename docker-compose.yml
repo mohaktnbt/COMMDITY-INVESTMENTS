@@ -1,0 +1,51 @@
+services:
+  questdb:
+    image: questdb/questdb:8.2.3
+    ports:
+      - "9000:9000"   # Web console
+      - "9009:9009"   # ILP (Influx Line Protocol)
+      - "8812:8812"   # PostgreSQL wire
+    volumes:
+      - questdb-data:/var/lib/questdb
+      - ./infra/questdb/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - QDB_HTTP_ENABLED=true
+
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-commodity_monitor}
+      POSTGRES_USER: ${POSTGRES_USER:-commodity}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-commodity_dev}
+    volumes:
+      - timescale-data:/var/lib/postgresql/data
+      - ./infra/timescaledb/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 512mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:v24.3.1
+    command:
+      - redpanda start
+      - --smp 1
+      - --memory 512M
+      - --overprovisioned
+      - --kafka-addr internal://0.0.0.0:9092,external://0.0.0.0:19092
+      - --advertise-kafka-addr internal://redpanda:9092,external://localhost:19092
+    ports:
+      - "19092:19092"  # Kafka API
+      - "8081:8081"    # Schema Registry
+      - "8082:8082"    # REST Proxy
+
+volumes:
+  questdb-data:
+  timescale-data:
+  redis-data:

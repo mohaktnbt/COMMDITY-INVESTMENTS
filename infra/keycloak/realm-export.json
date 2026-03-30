@@ -1,0 +1,38 @@
+{
+  "realm": "commodity-monitor",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": true,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "roles": {
+    "realm": [
+      { "name": "admin", "description": "Full access to all features" },
+      { "name": "trader", "description": "Trading features, alerts, watchlists" },
+      { "name": "viewer", "description": "Read-only dashboard access" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "commodity-monitor-web",
+      "enabled": true,
+      "publicClient": true,
+      "redirectUris": ["http://localhost:5173/*", "https://commodity-monitor.example.com/*"],
+      "webOrigins": ["http://localhost:5173", "https://commodity-monitor.example.com"],
+      "protocol": "openid-connect",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false
+    },
+    {
+      "clientId": "commodity-monitor-api",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true,
+      "protocol": "openid-connect"
+    }
+  ],
+  "defaultRoles": ["viewer"]
+}
